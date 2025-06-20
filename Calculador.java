@@ -8,6 +8,7 @@ Author: Amangeldiuly Madi
 public class Calculador {
 
     final static String OPERACIONES = "+-*/";
+    final static String BRACKETS = "()";
 
     public static String Bucle(Scanner sc, String resp) {
         do {
@@ -18,37 +19,52 @@ public class Calculador {
     }
 
     static boolean Chequear_format(Stack<Double> st, String calc) {
-        int cant_operaciones = 0;
-        boolean válido;
+        int cant_op = 0,menos = 0;
         String num = "";
+        boolean brackets = false;
         if (calc.length() < 3) {
             return false;
         }
         for (int i = 0; i < calc.length(); i++) {
-            char ch = calc.charAt(i);
-            if (OPERACIONES.indexOf(ch) >= 0) {
-                if (!num.isEmpty()) {
-                    st.push((Double.valueOf(num)));
-                    num = "";
+            if (BRACKETS.indexOf(calc.charAt(i)) >= 0) {
+                brackets = !brackets;
+                menos = 0;
+            } else if ((OPERACIONES.indexOf(calc.charAt(i)) >= 0)) {
+                if (brackets && calc.charAt(i) == '-') {
+                    num += calc.charAt(i);
+                    menos++;
+                    if (menos > 1) {
+                        return false;
+                    }
+                } else {
+                    if (!num.isEmpty()) {
+                        st.push((Double.valueOf(num)));
+                        num = "";
+                    }
+                    cant_op++;
                 }
-                cant_operaciones++;
-            } else if (Character.isDigit(ch) || ch == '.') {
-                num += ch;
+
+            } else if (Character.isDigit(calc.charAt(i)) || calc.charAt(i) == '.') {
+                num += calc.charAt(i);
             } else {
-                break;
+                return false;
             }
 
         }
         if (!num.isEmpty()) {
             st.push((Double.valueOf(num)));
         }
-        válido = cant_operaciones == 1 && st.size() == 2;
-        return válido;
+
+        return cant_op == 1 && st.size() == 2;
     }
 
     static char Cambiar_operación(char operación, String calc) {
+        boolean brackets = false;
         for (int i = 0; i < calc.length(); i++) {
-            if (OPERACIONES.indexOf(calc.charAt(i)) >= 0) {
+            if((BRACKETS.indexOf(calc.charAt(i))) >= 0){
+                brackets = !brackets;
+            }
+            if (OPERACIONES.indexOf(calc.charAt(i)) >= 0 && brackets == false) {
                 operación = calc.charAt(i);
             }
         }
@@ -80,9 +96,9 @@ public class Calculador {
                 char operación = 0;
                 Stack<Double> st = new Stack<>();
 
-                System.out.print("Ingrese una expresión(p.e: 2+3): ");
+                System.out.print("Ingrese una expresión(p.e: (-2)+3): ");
 
-                calc = (sc.nextLine().trim());
+                calc = (sc.nextLine().replaceAll("\\s", ""));
 
                 if (Chequear_format(st, calc)) {
                     operación = Cambiar_operación(operación, calc);

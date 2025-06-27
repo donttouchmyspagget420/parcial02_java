@@ -1,4 +1,4 @@
-// DISCLAIMER: Todos los adivinanzas fueron generados con IA
+// DISCLAIMER: Todos los adivinanzas fueron generadas con IA
 
 public class Content {
 

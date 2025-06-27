@@ -6,7 +6,7 @@ import java.util.Scanner;
 /*
 Author: Amangeldiuly Madi
  */
-// DISCLAIMER: Todos los adivinanzas fueron escribidas con IA
+// DISCLAIMER: Todos las adivinanzas fueron generadas con IA
 public class Adivinanza {
 
     static int Index(HashSet<Integer> set, int longtitud) {
